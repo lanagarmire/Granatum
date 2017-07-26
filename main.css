@@ -1,0 +1,100 @@
+/* #steps_list {
+  pointer-events: none;
+  margin: 15px;
+}
+*/
+
+.tab-content > .tab-pane.active {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.right-align {
+  text-align: right;
+}
+
+#shiny-notification-panel {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.shiny-notification {
+  box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.6);
+  width: 350px;
+}
+
+.shiny-progress-notification .progress {
+  height: 25px;
+}
+
+#loading-content {
+  position: absolute;
+  background: #000000;
+  z-index: 100;
+  left: 0;
+  right: 0;
+  height: 100%;
+  text-align: center;
+  color: #FFFFFF;
+}
+
+/*
+#uep_logo {
+  opacity: 1;
+  overflow:hidden;
+  -moz-animation: cssAnimation 1s 1s forwards, visibilityChange 1s forwards;
+  -webkit-animation: cssAnimation 1s 1s forwards, visibilityChange 1s forwards;
+  -o-animation: cssAnimation 1s 1s forwards, visibilityChange 1s forwards;
+  animation: cssAnimation 1s 1s forwards, visibilityChange 1s forwards;
+}
+
+@keyframes visibilityChange {
+  0% {
+      opacity:1;
+  }
+  100% {
+      opacity:0;
+  }
+}
+
+@-webkit-keyframes visibilityChange {
+  0% {
+    opacity:1;
+  }
+  100% {
+    opacity:0;
+  }
+}
+
+@keyframes cssAnimation {
+  to {
+    height:0;
+  }
+}
+
+@-webkit-keyframes cssAnimation {
+  to {
+    height:0;
+  }
+}
+*/
+
+.format-diagram {
+  max-width: 700px;
+}
+
+.centered {
+  text-align: center;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.bm-success {
+  padding:0;
+  float:right;
+  margin:5px;
+}

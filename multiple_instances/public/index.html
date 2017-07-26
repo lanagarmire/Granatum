@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/3.5.2/superagent.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <title>List of Granatum servers</title>
+  </head>
+  <body>
+    <table id="server-table">
+    </table>
+    <script>
+      setInterval(
+        () => {
+          $.get('/api/check', null, (data) => {
+            $('#server-table').empty();
+            $('#server-table').append($('</tr> <th>Status</th> <th>CPU</th> <th>Memory</th> <tr>'));
+            for (var i=0; i<data.length; i++) {
+              var el = $(`<tr> <td><a class="server-link" href="">Server ${i+1}</a></td> <td>${data[i].last_used}</td>`)
+              el.find('.server-link').click(() => {
+                window.location = `http://rna2.cc.hawaii.edu:${data[i].port}`
+                })
+              $('#server-table').append(el);
+            }
+          })
+        },
+        1000
+      );
+    </script>
+  </body>
+</html>

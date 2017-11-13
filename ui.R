@@ -20,6 +20,7 @@ ui <- function(request) {
       "Information",
       fluidRow(
         id = 'uep_logo_tray',
+        includeScript('google_analytics.js'),
         img(id = 'uep_logo', src = 'granatum_logo.svg'),
         p(
           'Welcome to Granatum! This is a graphical single-cell RNA-seq (scRNA-seq) analysis pipeline for genomics scientists. The pipeline will graphically guide you through the analysis of scRNA-seq data, starting from expression and metadata tables. It uses a comprehensive set of modules for quality control / normalization, clustering, differential gene expression / enrichment analysis, protein network interaction visualization, and cell pseudo-time pathway construction.'
@@ -102,7 +103,7 @@ ui <- function(request) {
         includeCSS('main.css'),
         tags$head(tags$link(rel = "shortcut icon", href = "/favicon.ico")),
         tags$head(tags$link(rel = "shortcut", href = "/favicon.ico")),
-        
+
         useShinyjs(),
         extendShinyjs(text = "shinyjs.refresh = function() { location.reload(); }", functions = "refresh"),
 
@@ -179,7 +180,7 @@ ui <- function(request) {
             ),
             tabPanel('Metadata Table', dataTableOutput('uep_preview_metadata_dt'))
           )
-          
+
         ) %>% hidden,
         fluidRow(
           id = 'uep_confirm_tray',
@@ -190,7 +191,7 @@ ui <- function(request) {
           actionButton('uep_submit', 'Submit', class = 'btn-success')
         ) %>% hidden
       ),
-      
+
       tabPanel(
         value = 'br',
         strong("Batch-effect removal"),
@@ -236,7 +237,7 @@ ui <- function(request) {
           actionButton('br_confirm', 'Submit', class = 'btn-success')
         )
       ),
-      
+
       tabPanel(
         value = 'oi',
         strong("Outlier removal"),
@@ -282,7 +283,7 @@ ui <- function(request) {
           dataTableOutput('oi_preview_tb')
         )
       ),
-      
+
       tabPanel(
         value = 'nz',
         strong("Normalization"),
@@ -315,7 +316,35 @@ ui <- function(request) {
           actionButton('nz_confirm', 'Submit', class = 'btn-success')
         )
       ),
-      
+
+      tabPanel(
+        value = 'im',
+        strong("Imputation"),
+        actionButton('bm_button_im', icon("bookmark-o", lib="font-awesome"), class = 'bm-success'), #TODO
+        fluidRow(
+          id = 'im_help_tray',
+          p(h2(strong('Imputation'))),
+          p(
+            'The large number of drop-outs might pose potential problems for downstream analyses. It is thus often appropriate to try to infer whether a zero is in the dataset is a drop-out -- that is, a non-zero expression level incorrectly assayed as zero. And if it is a drop-out, to infer its original expression level.'
+          )
+        ),
+        fluidRow(id = 'im_vis_tray',
+                 plotOutput('im_distribution', height = '450px')),
+        fluidRow(
+          id = 'im_algo_tray',
+          hr(),
+          actionButton('im_scimpute', 'scImpute')
+          ## actionButton('im_saver', 'SAVER')
+        ),
+        fluidRow(
+          id = 'im_confirm_tray',
+          class = 'right-align',
+          hr(),
+          actionButton('im_reset', 'Reset', class = 'btn-primary'), #TODO
+          actionButton('im_confirm', 'Submit', class = 'btn-success') #TODO
+        )
+      ),
+
       tabPanel(
         value = 'ft',
         strong("Gene filtering"),
@@ -378,7 +407,7 @@ ui <- function(request) {
           actionButton('ft_confirm', 'Submit', class = 'btn-success')
         )
       ),
-      
+
       tabPanel(
         value = 'cl',
         strong("Clustering"),
@@ -438,7 +467,7 @@ ui <- function(request) {
           actionButton('cl_confirm', 'Submit', class = 'btn-success')
         ) %>% hidden
       ),
-      
+
       tabPanel(
         value = 'de',
         strong("Differential expression"),
@@ -514,7 +543,7 @@ ui <- function(request) {
           actionButton('de_confirm', 'Submit', class = 'btn-success')
         ) %>% hidden
       ),
-      
+
       tabPanel(
         value = 'ne',
         strong("Protein network"),
@@ -536,7 +565,7 @@ ui <- function(request) {
           actionButton('ne_confirm', 'Proceed', class = 'btn-success')
         )
       ),
-      
+
       tabPanel(
         value = 'pt',
         strong("Pseudo-time construction"),

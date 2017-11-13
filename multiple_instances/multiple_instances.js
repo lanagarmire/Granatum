@@ -6,6 +6,7 @@ const NUM_PORTS = 20;
 const BOOKMARK_TIMEOUT = 60 * 60 * 24 * 30; // in sec
 const BOOKMARK_TIMEOUT_CHECK_INTERVAL = 60 * 1000; // in milli-sec
 const SERVER_LOAD_CHECK_INTERVAL = 60 * 1000; // in milli-sec
+// const INSTANCE_UP_CHECK_INTERVAL = 60 * 1000; // in milli-sec
 
 const express = require('express');
 const cp = require('child_process');
@@ -13,6 +14,7 @@ const async = require('async');
 const fs = require('fs');
 const winston = require('winston');
 const rimraf = require('rimraf');
+const ps = require('ps-node');
 
 const app = express();
 
@@ -67,12 +69,12 @@ function indexOfMin(arr) {
 
 // initialize all instances
 
-const instances = [];
+const instances = Array(NUM_PORTS);
 
 // TODO: make sure all instances are successfully initialized
 // (not bumped out because of port occupation)
 
-for (let i = 0; i < NUM_PORTS; i += 1) {
+function startInstance(i) {
   const port = PORT_START_POINT + i;
   const p = cp.spawn('Rscript', ['-e', `setwd(".."); source("load_dependencies.R"); enableBookmarking("server"); runApp(".", host="0.0.0.0", port=${port})`]);
   const pid = p.pid;
@@ -91,11 +93,17 @@ for (let i = 0; i < NUM_PORTS; i += 1) {
   });
   p.on('exit', (code) => {
     const pp = instances.find(ii => ii.pid === p.pid);
-    winston.warn(`The process with pid = ${pp.pid} and port = ${pp.port} has ended, the exit code = ${code}.`);
+    winston.warn(`The process with pid=${pp.pid} port=${pp.port} has ended, the exit code=${code}.`);
+    instances[i] = startInstance(i);
   });
 
-  winston.info(`pid: ${pid}; port: ${port}`);
-  instances.push({ p, port, pid, logger });
+  winston.info(`pid=${pid} port=${port} has been started.`);
+
+  return { p, port, pid, logger };
+}
+
+for (let i = 0; i < NUM_PORTS; i += 1) {
+  instances[i] = startInstance(i);
 }
 
 process.on('message', (m) => {
@@ -162,17 +170,36 @@ setInterval(
   BOOKMARK_TIMEOUT_CHECK_INTERVAL,
 );
 
-setInterval(
-  () => {
-    async.map(
-      range(PORT_START_POINT, PORT_START_POINT + NUM_PORTS),
-      (port, cb) => cp.exec(`netstat -anp | grep :${port} | grep ESTABLISHED | wc -l`, (e, out) => { cb(null, +out); }),
-      (e, rs) => {
-        winston.info(`${rs}`, { type: 'server-load' });
-      },
-    );
-  },
-  SERVER_LOAD_CHECK_INTERVAL,
-);
+async.forever((next) => {
+  async.map(
+    range(PORT_START_POINT, PORT_START_POINT + NUM_PORTS),
+    (port, cb) => cp.exec(`netstat -anp | grep :${port} | grep ESTABLISHED | wc -l`, (e, out) => { cb(null, +out); }),
+    (e, rs) => {
+      winston.info(`${rs}`, { type: 'server-load' });
+      setTimeout(() => next(), SERVER_LOAD_CHECK_INTERVAL);
+    },
+  );
+});
+
+
+// async.forever((next) => {
+//   async.eachOfSeries(
+//     instances,
+//     (instance, i, callback) => {
+//       ps.lookup({ pid: instance.pid }, (err, resultList) => {
+//         if (err) {
+//           throw new Error(err);
+//         }
+//         if (!resultList[0]) {
+//           winston.info(`Instance pid=${instance.pid} port=${instance.port} is down. Restarting ...`);
+//           instances[i] = startInstance(i);
+//         }
+//         callback();
+//       });
+//     },
+//     () => setTimeout(() => next(), INSTANCE_UP_CHECK_INTERVAL),
+//   );
+// });
+
 
 app.listen(8100);

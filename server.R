@@ -898,6 +898,16 @@ server <- function(input, output, session) {
     nz_refresh_plots()
   }
 
+  im_prep <- function() {
+    if(is.null(raw_mat_l)) { raw_data_modal(); return() }
+
+    im_raw_mat_l <<- raw_mat_l
+
+    save_var("im_raw_mat_l")
+
+    im_refresh_plots()
+  }
+
   ft_prep <- function() {
     if(is.null(raw_mat_l)) { raw_data_modal(); return() }
     if(is.null(sample_meta)) { sample_meta_modal(); return() }
@@ -1053,6 +1063,7 @@ server <- function(input, output, session) {
       oi = oi_prep(),
       nz = nz_prep(),
       ft = ft_prep(),
+      im = im_prep(),
       cl = cl_prep(),
       de = de_prep(),
       ne = ne_prep(),
@@ -1391,6 +1402,61 @@ server <- function(input, output, session) {
     }
   )
 
+  im_refresh_plots <- function() {
+    withProgress(message = 'Plotting the distribution ...', {
+      ggdat <- im_raw_mat_l %>%
+        melt(c('gene', 'sample'), value.name = 'log_expr')
+
+      nz_p <-
+        ggplot(ggdat) +
+        geom_histogram(aes(log_expr)) +
+        labs(x = 'Log Exp. Lvl.', y = 'Number of entries in the matrix')
+
+      output$im_distribution <- renderPlot(nz_p)
+    })
+  }
+
+  observeEvent(input$im_saver, {
+    if (restoring) return()
+
+    withProgress(message = 'Performing SAVER ...', {
+      im_raw_mat_l <<- SAVER::saver(im_raw_mat_l)$estimate
+    })
+
+    save_var("im_raw_mat_l")
+
+    im_refresh_plots()
+  })
+
+  observeEvent(input$im_scimpute, {
+    if (restoring) return()
+
+    withProgress(message = 'Performing scImpute ...', {
+      im_raw_mat_l <<- scImpute::scimpute(im_raw_mat_l)
+    })
+
+    save_var("im_raw_mat_l")
+
+    im_refresh_plots()
+  })
+
+  observeEvent(input$im_reset, {
+    if(restoring) { return() }
+    im_raw_mat_l <<- raw_mat_l
+    save_var("im_raw_mat_l")
+    im_refresh_plots()
+  })
+
+  observeEvent(input$im_confirm, {
+    if(restoring) { return() }
+
+    if(is.null(im_raw_mat_l)) return()
+    raw_mat_l <<- im_raw_mat_l
+    save_var("raw_mat_l")
+
+    updateTabsetPanel(session, 'steps_list', 'ft')
+  })
+
   ft_refresh_plots_disp <- function() {
     withProgress(message = 'Calculating dispersion ... ', {
       if (is.null(ft_cds)) {
@@ -1471,7 +1537,7 @@ server <- function(input, output, session) {
     raw_mat_l <<- nz_raw_mat_l
     save_var("raw_mat_l")
 
-    updateTabsetPanel(session, 'steps_list', 'ft')
+    updateTabsetPanel(session, 'steps_list', 'im')
   })
 
   cl_refresh_plots <- function(pr_dat, tsne_dat) {

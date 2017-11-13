@@ -40,3 +40,4 @@ plot_monocle <- function (monocle_data, color_by=NULL) {
   plot_cell_trajectory(monocle_data, color_by=color_by, show_tree=T, show_backbone=T) +
     theme_grey(base_size=20)
 }
+

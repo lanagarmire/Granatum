@@ -1,8 +1,9 @@
 do_limma_for_two_groups <- function (mat, vec, n_cores)  {
+  vec <- paste('group_', as.character(vec), sep='')
   design <- model.matrix(~0+vec)
   lvls <- vec %>% factor %>% levels
   colnames(design) <- lvls
-  contrast <- makeContrasts(sprintf('%s - %s', lvls[1], lvls[2]), levels=design)
+  contrast <- makeContrasts(contrasts=sprintf('%s - %s', lvls[1], lvls[2]), levels=design)
   fit <- lmFit(mat, design)
   fit <- contrasts.fit(fit, contrast)
   fit <- eBayes(fit)

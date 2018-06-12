@@ -20,8 +20,6 @@ const app = express()
 const loggingDir = process.env.LOGGING_DIR || 'logs/'
 const domainName = process.env.DOMAIN_NAME || 'granatum.garmiregroup.org'
 
-fs.mkdirSync(loggingDir)
-
 winston.configure({})
 
 winston.add(winston.transports.File, {
@@ -73,6 +71,7 @@ const startInstance = instanceIndex => {
     logger.info(`${data}`, { instance: instanceIndex, type: 'stdout' })
   })
   rProcess.stderr.on('data', data => {
+    console.log(data.toString())
     logger.warn(`${data}`, { instance: instanceIndex, type: 'stderr' })
   })
   rProcess.on('exit', code => {

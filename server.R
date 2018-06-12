@@ -90,6 +90,12 @@ source("load_dependencies.R")
 server <- function(input, output, session) {
   # User space global variables
 
+  print('HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH')
+  print('HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH')
+  print('HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH')
+  print('HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH')
+  print(devtools::session_info())
+
   raw_df <- NULL
   raw_mat <- NULL
   pr_dat <- NULL
@@ -1396,9 +1402,10 @@ server <- function(input, output, session) {
       "matrix.csv"
     },
     content = function(file) {
+      write('"Please cite: Zhu, Xun et al. “Granatum: A Graphical Single-Cell RNA-Seq Analysis Pipeline for Genomics Scientists.” Genome Medicine 9.1 (2017)"\n',file=file)
       nz_raw_mat_l %>% {
         exp(.) - 1
-      } %>% as.data.frame %>% rownames_to_column('Gene') %>% write_csv(file)
+      } %>% as.data.frame %>% rownames_to_column('Gene') %>% write_csv(file,append=TRUE)
     }
   )
 
@@ -1710,9 +1717,10 @@ server <- function(input, output, session) {
         "matrix.csv"
       },
       content = function(file) {
+      write('"Please cite: Zhu, Xun et al. “Granatum: A Graphical Single-Cell RNA-Seq Analysis Pipeline for Genomics Scientists.” Genome Medicine 9.1 (2017)"\n',file=file)
         raw_mat_l %>% {
           exp(.) - 1
-        } %>% as.data.frame %>% rownames_to_column('Gene') %>% write_csv(file)
+        } %>% as.data.frame %>% rownames_to_column('Gene') %>% write_csv(file, append=T)
       }
     )
 
@@ -1721,11 +1729,12 @@ server <- function(input, output, session) {
         "clustering.csv"
       },
       content = function(file) {
+      write('"Please cite: Zhu, Xun et al. “Granatum: A Graphical Single-Cell RNA-Seq Analysis Pipeline for Genomics Scientists.” Genome Medicine 9.1 (2017)"\n',file=file)
         cluster_df <-
           data_frame(sample = colnames(raw_mat_l), cluster = clusters)
         print(colnames(sample_meta))
         print(colnames(cluster_df))
-        sample_meta %>% left_join(cluster_df, by = c(ID = 'sample')) %>% write_csv(file)
+        sample_meta %>% left_join(cluster_df, by = c(ID = 'sample')) %>% write_csv(file, append=T)
       }
     )
 
@@ -1875,8 +1884,12 @@ server <- function(input, output, session) {
       species_code_long <-
         switch(species_, mouse = 'mmu', human = 'hsa')
 
+      print('mappedkeys(KEGGPATHID2EXTID) = ')
+      print(mappedkeys(KEGGPATHID2EXTID))
       kegg_pathways <-
         mappedkeys(KEGGPATHID2EXTID) %>% str_subset(species_code_long) %>% str_replace(sprintf('^%s(.*)$', species_code_long), '\\1')
+      print('kegg_pathways = ')
+      print(kegg_pathways)
       kegg_names <-
         KEGGPATHID2NAME[kegg_pathways] %>% as.list %>% simplify
       kegg_to_eg <-
@@ -1885,13 +1898,12 @@ server <- function(input, output, session) {
         }] %>% as.list
       names(kegg_to_eg) <- kegg_names
 
+      print('kegg_to_eg = ')
+      print(kegg_to_eg)
+
       SYMBOL2EG <-
         eval(parse(text = sprintf(
           'org.%s.egSYMBOL2EG', species_code
-        )))
-      GO2ALLEGS <-
-        eval(parse(text = sprintf(
-          'org.%s.egGO2ALLEGS', species_code
         )))
 
       names(scores_) <- genes_
@@ -1907,12 +1919,17 @@ server <- function(input, output, session) {
 
       dput(genes)
 
+      print('scores_ = ')
+      print(scores_)
 
       fgseaRes <- fgsea(kegg_to_eg, scores_, nperm = 10000)
 
       ggdat <-
         fgseaRes %>% as.data.frame %>% as_data_frame %>% arrange(-abs(NES)) %>% head(20) %>% mutate(pathway =
                                                                                                       fct_inorder(pathway))
+      print('ggdat = ')
+      print(ggdat)
+
       ggplot(ggdat) +
         geom_point(aes(
           x = pathway,
@@ -2022,12 +2039,13 @@ server <- function(input, output, session) {
       "differential_expression.csv"
     },
     content = function(file) {
+      write('"Please cite: Zhu, Xun et al. “Granatum: A Graphical Single-Cell RNA-Seq Analysis Pipeline for Genomics Scientists.” Genome Medicine 9.1 (2017)"\n',file=file)
       de_res %>%
         lapply(function(x)
           rownames_to_column(x)) %>%
         enframe('comparison', 'data') %>%
         unnest %>%
-        write_csv(file)
+        write_csv(file, append=T)
     }
   )
 

@@ -21,9 +21,15 @@ ui <- function(request) {
       fluidRow(
         id = 'uep_logo_tray',
         includeScript('google_analytics.js'),
+        includeScript('custom_analytics.js'),
         img(id = 'uep_logo', src = 'granatum_logo.svg'),
         p(
           'Welcome to Granatum! This is a graphical single-cell RNA-seq (scRNA-seq) analysis pipeline for genomics scientists. The pipeline will graphically guide you through the analysis of scRNA-seq data, starting from expression and metadata tables. It uses a comprehensive set of modules for quality control / normalization, clustering, differential gene expression / enrichment analysis, protein network interaction visualization, and cell pseudo-time pathway construction.'
+        ),
+        p(
+          strong('Please cite: ', a(href='https://genomemedicine.biomedcentral.com/articles/10.1186/s13073-017-0492-3',
+            em('Zhu, Xun et al. “Granatum: A Graphical Single-Cell RNA-Seq Analysis Pipeline for Genomics Scientists.” Genome Medicine 9.1 (2017)'),
+            onclick="trackOutboundLink('https://genomemedicine.biomedcentral.com/articles/10.1186/s13073-017-0492-3', 'paper'); return false;"))
         ),
         p(
           'Note 1: if the browser window (or tab) is accidentally closed, you may resume from where you left off by opening the last page in your broswer history.'
@@ -31,30 +37,34 @@ ui <- function(request) {
         p(
           'Note 2: depending on dataset size, some steps may take time. Please allow computations to complete even if your browser appears to hang.'
         ),
-        actionButton('info_next', 'Proceed to Step 1', class = 'btn-success')
+        actionButton('info_next', 'Proceed to Step 1', class = 'btn-success', onclick = "openSurveyOnce();")
       ),
       fluidRow(
         id = 'uep_example_tray',
+        p(h2('Visitor Map')),
+        tags$iframe(id="QZG5w5YOoj", width="600", height="350", style="margin:0px;border-width:0px;overflow:hidden;", scrolling="no",
+                    src="https://www.embeddedanalytics.com/reports/displayreport?reportcode=QZG5w5YOoj&chckcode=garhaApL1xSRdEw9Qs9Pm9"),
         p(h2('Background')),
+        p('Please cite: Zhu, Xun et al. “Granatum: A Graphical Single-Cell RNA-Seq Analysis Pipeline for Genomics Scientists.” Genome Medicine 9.1 (2017)'),
         p(
           'Video tutorial:',
           tags$a(href = "http://garmiregroup.org/granatum/video", "link to the video", target =
-                   "_blank")
+                   "_blank", onclick="trackOutboundLink('http://garmiregroup.org/granatum/video', 'video'); return false;")
         ),
         p(
           'Survey (suggestions are welcome!):',
           tags$a(href = "http://garmiregroup.org/granatum/survey", "link to the survey", target =
-                   "_blank")
+                   "_blank", onclick="trackOutboundLink('http://garmiregroup.org/granatum/survey', 'survey'); return false;")
         ),
         p(
           'Manuscript:',
           tags$a(href = "http://garmiregroup.org/granatum/paper", "link to the manuscript", target =
-                   "_blank")
+                   "_blank", onclick="trackOutboundLink('http://garmiregroup.org/granatum/paper', 'manuscript'); return false;")
         ),
         p(
           'Manual:',
           tags$a(href = "http://garmiregroup.org/granatum/manual", "download PDF", target =
-                   "_blank")
+                   "_blank", onclick="trackOutboundLink('http://garmiregroup.org/granatum/manual', 'manual'); return false;")
         ),
         p(
           'License:',
@@ -68,7 +78,7 @@ ui <- function(request) {
         p('To run the server on your own computer, download it from this link:'),
         p(
           tags$a(href = "https://drive.google.com/file/d/0BzaGo-kaBuGLZ2EtUEZPUDNpSW8/view?usp=sharing", "Download server file", target =
-                   "_blank")
+                   "_blank", onclick="trackOutboundLink('https://drive.google.com/file/d/0BzaGo-kaBuGLZ2EtUEZPUDNpSW8/view?usp=sharing', 'downloadGranatum'); return false;")
         ),
         p('To use the file, have VirtualBox installed:'),
         p(
@@ -115,6 +125,9 @@ ui <- function(request) {
         fluidRow(
           id = 'uep_upload_tray',
           hr(),
+          p(
+            'You can upload your own data or try Granatum on our sample data.'
+          ),
           p(
             'Is your data Human or Mouse? Make a selection under "Species". Then provide your Expression and Metadata tables as comma separated value (CSV) files.'
           ),

@@ -41,3 +41,7 @@ install.packages("dplyr")
 install.packages("SummarizedExperiment")
 install.packages("NMF")
 install.packages("dplyr")
+
+source("https://bioconductor.org/biocLite.R")
+biocLite("preprocessCore")
+biocLite("monocle")

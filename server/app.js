@@ -116,7 +116,7 @@ setInterval(() => {
       const filePath = files[i]
       const disconnectedFilename = `${basedir}/${filePath}/disconnected`
       fs.readFile(disconnectedFilename, (readFileErr, data) => {
-        if (err === null) {
+        if (readFileErr === null) {
           const lastLogoutTime = parseInt(data)
           const currentTime = (Date.now() / 1000) | 0
           const secondsElapsed = currentTime - lastLogoutTime

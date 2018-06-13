@@ -18,7 +18,7 @@ const app = express()
 
 const loggingDir = process.env.LOGGING_DIR || 'logs/'
 const domainName = process.env.DOMAIN_NAME || 'granatum.garmiregroup.org'
-const hostIp = process.env.HOST_IP || '35.203.149.0' // todo: pull this from env
+const hostIp = process.env.HOST_IP || '0.0.0.0'
 
 winston.configure({})
 

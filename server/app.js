@@ -13,7 +13,6 @@ const async = require('async')
 const fs = require('fs')
 const winston = require('winston')
 const rimraf = require('rimraf')
-const ps = require('ps-node')
 
 const app = express()
 

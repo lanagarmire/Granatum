@@ -1,7 +1,7 @@
 /* eslint no-bitwise: ["error", { "int32Hint": true }] */
 
 const PORT_START_POINT = 8101
-const NUM_PORTS = 20
+const NUM_PORTS = 4
 const BOOKMARK_TIMEOUT = 60 * 60 * 24 * 30 // in sec
 const BOOKMARK_TIMEOUT_CHECK_INTERVAL = 60 * 1000 // in milli-sec
 const SERVER_LOAD_CHECK_INTERVAL = 60 * 1000 // in milli-sec
@@ -18,7 +18,7 @@ const app = express()
 
 const loggingDir = process.env.LOGGING_DIR || 'logs/'
 const domainName = process.env.DOMAIN_NAME || 'granatum.garmiregroup.org'
-const hostIp = process.env.HOST_IP || '35.203.149.0'
+const hostIp = process.env.HOST_IP || '35.203.149.0' // todo: pull this from env
 
 winston.configure({})
 

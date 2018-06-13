@@ -18,6 +18,7 @@ const app = express()
 
 const loggingDir = process.env.LOGGING_DIR || 'logs/'
 const domainName = process.env.DOMAIN_NAME || 'granatum.garmiregroup.org'
+const hostIp = process.env.HOST_IP || '35.203.149.0'
 
 winston.configure({})
 
@@ -56,7 +57,7 @@ const startInstance = instanceIndex => {
   const port = PORT_START_POINT + instanceIndex
   const rProcess = child_process.spawn('Rscript', [
     '-e',
-    `setwd(".."); source("load_dependencies.R"); enableBookmarking("server"); runApp(".", host="0.0.0.0", port=${port})`
+    `setwd(".."); source("load_dependencies.R"); enableBookmarking("server"); runApp(".", host="${hostIp}", port=${port})`
   ])
   const pid = rProcess.pid
   const logger = new winston.Logger()

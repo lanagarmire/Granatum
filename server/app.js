@@ -17,7 +17,7 @@ const rimraf = require('rimraf')
 const app = express()
 
 const loggingDir = process.env.LOGGING_DIR || 'logs/'
-const domainName = process.env.DOMAIN_NAME || 'granatum.garmiregroup.org'
+const domainName = process.env.DOMAIN_NAME || 'granatum1.garmiregroup.org'
 const hostIp = process.env.HOST_IP || '0.0.0.0'
 
 winston.configure({})
@@ -150,4 +150,4 @@ async.forever(next => {
   )
 })
 
-app.listen(8100)
+app.listen(80)

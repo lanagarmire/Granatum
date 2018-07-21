@@ -47,3 +47,6 @@ source('subsampling_PCA.R')
 detach('package:dplyr')
 library(NMF)
 library(dplyr)
+
+source("https://bioconductor.org/biocLite.R")
+biocLite("impute")

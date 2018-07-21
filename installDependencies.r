@@ -40,3 +40,6 @@ biocLite("GO.db")
 biocLite("org.Hs.eg.db")
 biocLite("org.Mm.eg.db")
 biocLite("SummarizedExperiment")
+biocLite("impute")
+
+devtools::install_url("https://cran.r-project.org/src/contrib/Archive/MetaDE/MetaDE_1.0.5.tar.gz")

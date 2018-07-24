@@ -1443,10 +1443,9 @@ server <- function(input, output, session) {
         im_raw_mat_l <<- scImpute::scimpute(im_raw_mat_l)
       })
     }, error = function(err) {
-        stop(sprintf(
-            'Something went wrong',
-            err
-          ))
+      showModal(modalDialog(sprintf(
+          'Something went wrong: %s', err
+        )))
     })
 
     save_var("im_raw_mat_l")

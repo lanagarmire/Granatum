@@ -1438,8 +1438,15 @@ server <- function(input, output, session) {
   observeEvent(input$im_scimpute, {
     if (restoring) return()
 
-    withProgress(message = 'Performing scImpute ...', {
-      im_raw_mat_l <<- scImpute::scimpute(im_raw_mat_l)
+    tryCatch({
+      withProgress(message = 'Performing scImpute ...', {
+        im_raw_mat_l <<- scImpute::scimpute(im_raw_mat_l)
+      })
+    }, error = function(err) {
+        stop(sprintf(
+            'Something went wrong',
+            err
+          ))
     })
 
     save_var("im_raw_mat_l")

@@ -1809,7 +1809,9 @@ server <- function(input, output, session) {
     if(restoring) { return() }
     shinyjs::hide('de_start_tray')
 
-    withProgress(message = 'Computing differential expression ...', {
+
+    tryCatch({
+      withProgress(message = 'Computing differential expression ...', {
       mat <- raw_mat[rownames(raw_mat_l), colnames(raw_mat_l)]
       n_clusters <- clusters %>% unique %>% length
       if (ncol(mat) > n_clusters * 48) {
@@ -1843,6 +1845,11 @@ server <- function(input, output, session) {
       save_var("de_res")
 
       de_refresh_plots()
+    })
+    }, error = function(err) {
+      showModal(modalDialog(sprintf(
+          'Something went wrong: %s', err
+        )))
     })
 
     tbps <- list()

@@ -82,6 +82,11 @@ read_mat <-
 
 
 
+errorModal = function(err) {
+      showModal(modalDialog(sprintf(
+          'Something went wrong: %s', err
+        )))
+    }
 
 
 # server ------------------------------------------------------------------
@@ -1364,12 +1369,16 @@ server <- function(input, output, session) {
   observeEvent(input$nz_sizefactor, {
     if(restoring) { return() }
 
+    tryCatch({
+
     nz_raw_mat_l <<- nz_raw_mat_l %>% exp %>% {
       . - 1
     } %>%
       deseq_sizefactor_normalization %>% {
         . + 1
       } %>% log
+
+      }, error = errorModal)
 
     save_var("nz_raw_mat_l")
 
@@ -1442,11 +1451,7 @@ server <- function(input, output, session) {
       withProgress(message = 'Performing scImpute ...', {
         im_raw_mat_l <<- scImpute::scimpute(im_raw_mat_l)
       })
-    }, error = function(err) {
-      showModal(modalDialog(sprintf(
-          'Something went wrong: %s', err
-        )))
-    })
+    }, error = errorModal)
 
     save_var("im_raw_mat_l")
 
@@ -1846,11 +1851,7 @@ server <- function(input, output, session) {
 
       de_refresh_plots()
     })
-    }, error = function(err) {
-      showModal(modalDialog(sprintf(
-          'Something went wrong: %s', err
-        )))
-    })
+    }, error = errorModal)
 
     tbps <- list()
     for (i in 1:length(de_res)) {

@@ -1,45 +1,30 @@
-install.packages("devtools")
-library(devtools)
+installIfNeeded = function (packages, installFn = install.packages) {
+	newPackages <- packages[!(packages %in% installed.packages()[, "Package"])]
+	if (length(newPackages)) installFn(newPackages)
+}
 
-install_github("Vivianstats/scImpute")
-install_github("mohuangx/SAVER@*release")
+cranPackages = c(
+	"devtools", "Rtsne", "igraph", "visNetwork", "shiny", "htmltools", "shinyjs", "htmlwidgets", "plotly", "Rlof",
+	"scales", "reshape2", "purrr", "markdown", "shinythemes", "readr", "stringr", "tidyr", "tibble", "forcats",
+	"dplyr", "NMF", "dplyr")
 
-install.packages("Rtsne")
-install.packages("igraph")
-install.packages("visNetwork")
-install.packages("limma")
-install.packages("shiny")
-install.packages("htmltools")
-install.packages("shinyjs")
-install.packages("htmlwidgets")
-install.packages("plotly")
-install.packages("Rlof")
-install.packages("scales")
-install.packages("reshape2")
-install.packages("purrr")
-install.packages("markdown")
-install.packages("shinythemes")
-install.packages("readr")
-install.packages("stringr")
-install.packages("tidyr")
-install.packages("tibble")
-install.packages("forcats")
-install.packages("dplyr")
-install.packages("NMF")
-install.packages("dplyr")
+installIfNeeded(cranPackages)
 
 source("https://bioconductor.org/biocLite.R")
-biocLite("monocle")
-biocLite("preprocessCore")
-biocLite("edgeR")
-biocLite("scde")
-biocLite("sva")
-biocLite("fgsea")
-biocLite("KEGG.db")
-biocLite("GO.db")
-biocLite("org.Hs.eg.db")
-biocLite("org.Mm.eg.db")
-biocLite("SummarizedExperiment")
-biocLite("impute")
+bioPackages = c(
+	"monocle", "preprocessCore", "edgeR", "scde", "sva", "fgsea", "KEGG.db", "limma",
+	"GO.db", "org.Hs.eg.db", "org.Mm.eg.db", "SummarizedExperiment", "impute"
+)
 
-devtools::install_url("https://cran.r-project.org/src/contrib/Archive/MetaDE/MetaDE_1.0.5.tar.gz")
+installIfNeeded(bioPackages, biocLite)
+
+library(devtools)
+
+installIfNeeded("scImpute", function (new) install_github("Vivianstats/scImpute"))
+installIfNeeded("SAVER", function (new) install_github("mohuangx/SAVER@*release"))
+
+installIfNeeded("MetaDE", function (new) devtools::install_url("https://cran.r-project.org/src/contrib/Archive/MetaDE/MetaDE_1.0.5.tar.gz"))
+
+
+# Linux packages:
+# Fedora: sudo dnf install libXt-devel

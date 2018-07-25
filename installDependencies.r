@@ -1,3 +1,5 @@
+# Rscript installDependencies.r
+
 installIfNeeded = function (packages, installFn = install.packages) {
 	newPackages <- packages[!(packages %in% installed.packages()[, "Package"])]
 	if (length(newPackages)) installFn(newPackages)

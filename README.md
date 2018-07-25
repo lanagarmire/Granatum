@@ -14,5 +14,6 @@ This **should** work on Google Cloud.
 10. node app.js
 11. Make sure both Google Firewall and Ubuntu Firewall are open for Granatum ports
 12. To run on port 80 you need to allow node to run on privileged ports:
-13. `sudo apt-get install libcap2-bin; sudo setcap cap_net_bind_service=+ep /usr/local/bin/node`
-14. Increase R's default R_MAX_NUM_DLLS `echo "R_MAX_NUM_DLLS=500" > ~/.Renviron`
+13. Ubuntu: `sudo apt-get install libcap2-bin; sudo setcap cap_net_bind_service=+ep /usr/local/bin/node`
+14. Fedora: `sudo yum install libcap-devel; sudo setcap cap_net_bind_service=+ep /usr/local/bin/node`
+15. Increase R's default R_MAX_NUM_DLLS `echo "R_MAX_NUM_DLLS=500" > ~/.Renviron`

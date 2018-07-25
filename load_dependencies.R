@@ -1,5 +1,3 @@
-library(scImpute)
-library(SAVER)
 library(Rtsne)
 library(preprocessCore)
 library(igraph)
@@ -50,3 +48,6 @@ library(dplyr)
 
 source("https://bioconductor.org/biocLite.R")
 biocLite("impute")
+
+library(scImpute)
+library(SAVER)

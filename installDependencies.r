@@ -25,6 +25,7 @@ library(devtools)
 installIfNeeded("scImpute", function (new) install_github("Vivianstats/scImpute"))
 installIfNeeded("SAVER", function (new) install_github("mohuangx/SAVER@*release"))
 
+# install.packages("MetaDE", repos = "http://cran.us.r-project.org")
 installIfNeeded("MetaDE", function (new) devtools::install_url("https://cran.r-project.org/src/contrib/Archive/MetaDE/MetaDE_1.0.5.tar.gz"))
 
 

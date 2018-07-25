@@ -18,11 +18,7 @@
 ## NODES
 NODES <- function(data, group, r = 20, smooth_points = 10000, zper = 0.5) {
 
-  # install require libraries
-  if (!require("MetaDE"))
-    install.packages("MetaDE", repos = "http://cran.us.r-project.org")
-
-  require(MetaDE)
+  library(MetaDE)
 
   # This part is for identifying the groups
   indices <- list()

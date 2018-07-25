@@ -1,6 +1,3 @@
-library(monocle)
-
-
 do_monocle <- function (monocle_expr_matrix, monocle_sample_sheet) { 
 
   monocle_gene_annotation <- data.frame(row.names=rownames(monocle_expr_matrix))

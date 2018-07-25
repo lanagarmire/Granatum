@@ -1,18 +1,19 @@
 /* eslint no-bitwise: ["error", { "int32Hint": true }] */
 
-const PORT_START_POINT = 8101
-const NUM_PORTS = 4
-const BOOKMARK_TIMEOUT = 60 * 60 * 24 * 30 // in sec
-const BOOKMARK_TIMEOUT_CHECK_INTERVAL = 60 * 1000 // in milli-sec
-const SERVER_LOAD_CHECK_INTERVAL = 60 * 1000 // in milli-sec
-// const INSTANCE_UP_CHECK_INTERVAL = 60 * 1000; // in milli-sec
-
 const express = require('express')
 const child_process = require('child_process')
 const async = require('async')
 const fs = require('fs')
 const winston = require('winston')
 const rimraf = require('rimraf')
+const argv = require('minimist')(process.argv.slice(2))
+
+const PORT_START_POINT = 8101
+const NUM_PORTS = argv.ports ? parseInt(argv.ports) : 4
+const BOOKMARK_TIMEOUT = 60 * 60 * 24 * 30 // in sec
+const BOOKMARK_TIMEOUT_CHECK_INTERVAL = 60 * 1000 // in milli-sec
+const SERVER_LOAD_CHECK_INTERVAL = 60 * 1000 // in milli-sec
+// const INSTANCE_UP_CHECK_INTERVAL = 60 * 1000; // in milli-sec
 
 const app = express()
 
@@ -47,8 +48,11 @@ const range = function(a, b) {
 const indexOfMin = arr => arr.indexOf(Math.min(...arr))
 
 // initialize all instances
-
 const instances = Array(NUM_PORTS)
+
+// Set process title to make it easy to check running status of this app from other apps
+// Note: process.title is limited in length to length of initial command
+process.title = process.title.length < 5 ? 'grn1' : 'gran1node'
 
 // TODO: make sure all instances are successfully initialized
 // (not bumped out because of port occupation)

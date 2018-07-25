@@ -46,8 +46,7 @@ detach('package:dplyr')
 library(NMF)
 library(dplyr)
 
-source("https://bioconductor.org/biocLite.R")
-biocLite("impute")
+library(impute)
 
 library(scImpute)
 library(SAVER)

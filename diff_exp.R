@@ -28,7 +28,9 @@ do_edgeR_for_two_groups <- function (mat, vec, n_cores)  {
 }
 
 do_nodes_for_two_groups <- function (mat, vec, n_cores)  {
-  NODES(mat, as.character(vec))
+  # Below line is for debugging
+  # save(mat, vec, file = "~/granatum1/ignore/mat2.RData")
+  nodesDiffExp(mat, as.character(vec))
 }
 
 do_scde_for_two_groups <- function (mat, vec, n_cores)  {
@@ -85,10 +87,10 @@ do_diff_exp <- function (mat, vec, pairwise=F, n_cores, method)  {
 
       output[[sprintf('%s vs. %s', pair[1], pair[2])]] <-
         switch(method,
-               'nodes' = do_nodes_for_two_groups(mat2, vec2, n_cores),
-               'scde' = do_scde_for_two_groups(mat2, vec2, n_cores),
-               'edgeR' = do_edgeR_for_two_groups(mat2, vec2, n_cores),
-               'limma' = do_limma_for_two_groups(mat2, vec2, n_cores))
+               'diffExp_nodes' = do_nodes_for_two_groups(mat2, vec2, n_cores),
+               'diffExp_scde' = do_scde_for_two_groups(mat2, vec2, n_cores),
+               'diffExp_edgeR' = do_edgeR_for_two_groups(mat2, vec2, n_cores),
+               'diffExp_limma' = do_limma_for_two_groups(mat2, vec2, n_cores))
     }
   } else {
     for (l in lvls) {
@@ -99,10 +101,10 @@ do_diff_exp <- function (mat, vec, pairwise=F, n_cores, method)  {
 
       output[[sprintf('%s vs. all other', l)]] <-
         switch(method,
-               'nodes' = do_nodes_for_two_groups(mat, vec2, n_cores),
-               'scde' = do_scde_for_two_groups(mat, vec2, n_cores),
-               'edgeR' = do_edgeR_for_two_groups(mat, vec2, n_cores),
-               'limma' = do_limma_for_two_groups(mat, vec2, n_cores))
+               'diffExp_nodes' = do_nodes_for_two_groups(mat, vec2, n_cores),
+               'diffExp_scde' = do_scde_for_two_groups(mat, vec2, n_cores),
+               'diffExp_edgeR' = do_edgeR_for_two_groups(mat, vec2, n_cores),
+               'diffExp_limma' = do_limma_for_two_groups(mat, vec2, n_cores))
     }
   }
 

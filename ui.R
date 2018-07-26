@@ -504,10 +504,10 @@ ui <- function(request) {
             'diffExpStep_methods',
             'Method',
             c(
-              `NODES (fast)` = 'nodes',
-              `limma (fast)` = 'limma',
-              `edgeR (fast)` = 'edgeR',
-              `SCDE (slow)` = 'scde'
+              `NODES (fast)` = 'diffExp_nodes',
+              `limma (fast)` = 'diffExp_limma',
+              `edgeR (fast)` = 'diffExp_edgeR',
+              `SCDE (slow)` = 'diffExp_scde'
             )
           ),
           selectInput(

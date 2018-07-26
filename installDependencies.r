@@ -8,7 +8,7 @@ installIfNeeded = function (packages, installFn = install.packages) {
 cranPackages = c(
 	"devtools", "Rtsne", "igraph", "visNetwork", "shiny", "htmltools", "shinyjs", "htmlwidgets", "plotly", "Rlof",
 	"scales", "reshape2", "purrr", "markdown", "shinythemes", "readr", "stringr", "tidyr", "tibble", "forcats",
-	"dplyr", "NMF", "dplyr")
+	"dplyr", "NMF", "dplyr", "pracma")
 
 installIfNeeded(cranPackages)
 

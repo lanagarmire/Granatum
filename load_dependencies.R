@@ -38,10 +38,12 @@ library(dplyr)
 
 library(SummarizedExperiment)
 
-source('nodesDiffExp.R')
-source('diff_exp.R')
-source('monocle.R')
-source('subsampling_PCA.R')
+source('R/nodesDiffExp.R')
+source('R/keggAnalysis.R')
+source('R/geneOntologyAnalysis.R')
+source('R/diff_exp.R')
+source('R/monocle.R')
+source('R/subsampling_PCA.R')
 
 detach('package:dplyr')
 library(NMF)

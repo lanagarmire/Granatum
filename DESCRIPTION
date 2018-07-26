@@ -1,0 +1,11 @@
+Package: granatum
+Title: Graphical Single-Cell RNA-Seq Analysis Pipeline for Genomics Scientists
+Version: 0.0.0.9000
+Authors@R: person("Xun", "Zhu", email = "XunZhu@cc.hawaii.edu", role = c("aut", "cre"))
+Description: The pipeline will graphically guide you through the analysis of scRNA-seq data, starting from expression and metadata tables. It uses a comprehensive set of modules for quality control / normalization, clustering, differential gene expression / enrichment analysis, protein network interaction visualization, and cell pseudo-time pathway construction.
+Depends: R (>= 3.5.0)
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Suggests: 
+    testthat

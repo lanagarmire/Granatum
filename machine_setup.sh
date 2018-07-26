@@ -15,6 +15,14 @@ git clone git@gitlab.com:breckuh/granatum1.git
 cd granatum1
 mkdir shiny_bookmarks # todo: move this to code
 
+# Allow node on port 80:
+sudo apt-get install libcap2-bin
+sudo setcap cap_net_bind_service=+ep /usr/local/bin/node
+
+
+# Increase R's max DLLs
+echo "R_MAX_NUM_DLLS=500" > ~/.Renviron
+
 
 cd ~
 git clone https://github.com/tj/n

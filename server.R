@@ -1899,130 +1899,6 @@ server <- function(input, output, session) {
       )
     }
 
-    do_kegg_analysis <- function(genes_, scores_, species_, title_) {
-      species_code <- switch(species_, mouse = 'Mm', human = 'Hs')
-      species_code_long <-
-        switch(species_, mouse = 'mmu', human = 'hsa')
-
-      print('mappedkeys(KEGGPATHID2EXTID) = ')
-      print(mappedkeys(KEGGPATHID2EXTID))
-      kegg_pathways <-
-        mappedkeys(KEGGPATHID2EXTID) %>% str_subset(species_code_long) %>% str_replace(sprintf('^%s(.*)$', species_code_long), '\\1')
-      print('kegg_pathways = ')
-      print(kegg_pathways)
-      kegg_names <-
-        KEGGPATHID2NAME[kegg_pathways] %>% as.list %>% simplify
-      kegg_to_eg <-
-        KEGGPATHID2EXTID[kegg_pathways %>% {
-          sprintf('%s%s', species_code_long, .)
-        }] %>% as.list
-      names(kegg_to_eg) <- kegg_names
-
-      print('kegg_to_eg = ')
-      print(kegg_to_eg)
-
-      SYMBOL2EG <-
-        eval(parse(text = sprintf(
-          'org.%s.egSYMBOL2EG', species_code
-        )))
-
-      names(scores_) <- genes_
-
-      genes <- intersect(genes_, mappedkeys(SYMBOL2EG))
-
-      scores_ <- scores_[genes]
-
-      gene_entrez <-
-        genes %>% SYMBOL2EG[.] %>% as.list %>% map( ~ .[1]) %>% simplify
-
-      names(scores_) <- gene_entrez
-
-      dput(genes)
-
-      print('scores_ = ')
-      print(scores_)
-
-      fgseaRes <- fgsea(kegg_to_eg, scores_, nperm = 10000)
-
-      ggdat <-
-        fgseaRes %>% as.data.frame %>% as_data_frame %>% arrange(-abs(NES)) %>% head(20) %>% mutate(pathway =
-                                                                                                      fct_inorder(pathway))
-      print('ggdat = ')
-      print(ggdat)
-
-      ggplot(ggdat) +
-        geom_point(aes(
-          x = pathway,
-          y = abs(NES),
-          size = size
-        )) +
-        labs(title = paste("KEGG:", title_),
-             x = 'Pathway',
-             y = 'Absolute Normalized Enrichment Score') +
-        scale_size_continuous(name = 'Size of\nthe pathway') +
-        theme_grey(base_size = 20) +
-        theme(axis.text.x = element_text(angle = -30, hjust = 0),
-              plot.margin = margin(l = 50))
-    }
-
-    do_go_analysis <- function(genes_, scores_, species_, title_) {
-      species_code <- switch(species_, mouse = 'Mm', human = 'Hs')
-
-      SYMBOL2EG <-
-        eval(parse(text = sprintf(
-          'org.%s.egSYMBOL2EG', species_code
-        )))
-      GO2ALLEGS <-
-        eval(parse(text = sprintf(
-          'org.%s.egGO2ALLEGS', species_code
-        )))
-
-      names(scores_) <- genes_
-
-      genes <- intersect(genes_, mappedkeys(SYMBOL2EG))
-
-      scores_ <- scores_[genes]
-
-      print(length(genes))
-
-      gene_entrez <-
-        genes %>% SYMBOL2EG[.] %>% as.list %>% map( ~ .[1]) %>% simplify
-
-      print(length(gene_entrez))
-
-      names(scores_) <- gene_entrez
-
-      go_terms <-
-        intersect(mappedkeys(GO2ALLEGS), mappedkeys(GOTERM))
-      go_to_eg <- GO2ALLEGS[go_terms] %>% as.list
-      names(go_to_eg) <-
-        names(go_to_eg) %>% GOTERM[.] %>% as.list %>% map( ~ .@Term) %>% simplify
-      fgseaRes <-
-        fgsea(
-          go_to_eg,
-          scores_,
-          nperm = 10000,
-          minSize = 50,
-          maxSize = 500
-        )
-      ggdat <-
-        fgseaRes %>% as.data.frame %>% as_data_frame %>% arrange(-abs(NES)) %>% head(20) %>% mutate(pathway =
-                                                                                                      fct_inorder(pathway))
-      ggplot(ggdat) +
-        geom_point(aes(
-          x = pathway,
-          y = abs(NES),
-          size = size
-        )) +
-        labs(title = paste("GO:", title_),
-             x = 'Gene set',
-             y = 'Absolute Normalized Enrichment Score') +
-        scale_size_continuous(name = 'Gene set\nsize') +
-        theme_grey(base_size = 20) +
-        theme(axis.text.x = element_text(angle = -30, hjust = 0),
-              plot.margin = margin(l = 50))
-    }
-
     lapply(1:length(diffExpStep_res), function(i) {
       output[[sprintf('diffExpStep_res_tables_pane_%d', i)]] <-
         render_i(diffExpStep_res[[i]])
@@ -2040,7 +1916,7 @@ server <- function(input, output, session) {
       observeEvent(input[[sprintf('diffExpStep_go_analysis_%d', i)]], {
         output[[sprintf('diffExpStep_plot_%d', i)]] <- renderPlot(withProgress(message =
                                                                         'Performing enrichment analysis ...', {
-                                                                          do_go_analysis(rownames(diffExpStep_res[[i]]),
+                                                                          do_geneOntology_analysis(rownames(diffExpStep_res[[i]]),
                                                                                          diffExpStep_res[[i]]$Z,
                                                                                          species,
                                                                                          names(diffExpStep_res)[i])

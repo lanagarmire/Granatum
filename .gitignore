@@ -2,3 +2,6 @@
 .projectile
 shiny_bookmarks
 ignore/
+.Rproj.user
+.Rhistory
+.RData

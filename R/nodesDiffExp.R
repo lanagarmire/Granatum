@@ -1,3 +1,6 @@
+library(MetaDE)
+library(pracma)
+
 nodesDiffExp <- function(data, groups, permutations = 20, smooth_points = 8192, zper = 0.5) {
 #' Nonparametric differential expression analysis for scRNA-seq data.
 #' @param data \code{pQ} normalized single cell data.
@@ -12,9 +15,6 @@ nodesDiffExp <- function(data, groups, permutations = 20, smooth_points = 8192, 
 #' norm_Data <- pQ(data_Trapnell) # pQ normalize the data
 #' grp <- c(rep('T0',75),rep('T24',71)) # Group assignment
 #' Res <- nodesDiffExp(norm_Data[1:10,],grp) # Compute p-value just for 10 genes
-
-  library(MetaDE)
-  library(pracma)
 
   # This part is for identifying the groups
   indices <- list()

@@ -48,6 +48,9 @@ addResourcePath('www', 'www')
 #- third method: size factors
 #- FPKM normalizationStep
 
+hostname = "ilab.hawaii.edu:8100"
+hostname = "granatum1.garmiregroup.org"
+
 read_mat <-
   function(filename,
            format = 'auto',
@@ -202,7 +205,7 @@ server <- function(input, output, session) {
     write(as.integer(Sys.time()), sprintf("%s/disconnected", old_dir))
     write(as.integer(Sys.time()), sprintf("%s/branched", old_dir))
 
-    url <- sprintf("http://ilab.hawaii.edu:8100/?_state_id_=%s&tab=%s", basename(old_dir), input$steps_list)
+    url <- sprintf("http://%s/?_state_id_=%s&tab=%s", hostname, basename(old_dir), input$steps_list)
     # Display for user
     showModal(modalDialog(sprintf(
       'Warning: state may be garbage collected after some time. You may now use the following URL to access this state (copy to a safe place): %s', url
@@ -232,11 +235,14 @@ server <- function(input, output, session) {
         if(file.exists(sprintf("%s/branched", previous_dir))) {
           file.copy(from = file.path(previous_dir, flist), to = file.path(current_dir, flist))
         } else {
+          # TODO: THIS LOOKS DANGEROUS! A GET REQUEST CAN RENAME AND MOVE FILES (I was helping someone)
+          # debug their session and ended up moving their session to a new url
           file.rename(from = file.path(previous_dir, flist), to = file.path(current_dir, flist))
           unlink(previous_dir, recursive=TRUE)
         }
         file.rename(from = file.path(current_dir, 'input.back.rds'), to = file.path(current_dir, 'input.rds'))
       }
+
       if(file.exists(sprintf("%s/disconnected", current_dir))) file.remove(sprintf("%s/disconnected", current_dir))
       previous_dir <<- current_dir
     }
@@ -743,13 +749,13 @@ server <- function(input, output, session) {
     })
   })
 
-  observeEvent(input$go_back_uep, {
+  observeEvent(input$go_back_uploadStep, {
     if(restoring) { return() }
     updateTabsetPanel(session, 'steps_list', 'uploadStep')
     removeModal()
   })
 
-  observeEvent(input$go_back_de, {
+  observeEvent(input$go_back_diffExpStep, {
     if(restoring) { return() }
     updateTabsetPanel(session, 'steps_list', 'diffExpStep')
     removeModal()
@@ -758,14 +764,14 @@ server <- function(input, output, session) {
   raw_data_modal <- function() {
     showModal(modalDialog(
       sprintf('Raw data is missing. Need to go to Upload step and upload data first.'),
-      footer = tagList(actionButton("go_back_uep","Go back"))
+      footer = tagList(actionButton("go_back_uploadStep","Go back"))
     ))
   }
 
   sample_meta_modal <- function() {
     showModal(modalDialog(
       sprintf('Meta data is missing in Upload step. Please upload meta data first.'),
-      footer = tagList(actionButton("go_back_uep","Go back"))
+      footer = tagList(actionButton("go_back_uploadStep","Go back"))
     ))
   }
 
@@ -971,7 +977,7 @@ server <- function(input, output, session) {
     if(is.null(diffExpStep_res)) {
       showModal(modalDialog(
         sprintf('Differential expression was not run for the dataset. It must be run first.'),
-        footer = tagList(actionButton("go_back_de","Go back"))
+        footer = tagList(actionButton("go_back_diffExpStep","Go back"))
       ))
       return()
     }

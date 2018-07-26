@@ -10,8 +10,6 @@ const argv = require('minimist')(process.argv.slice(2))
 
 const PORT_START_POINT = 8101
 const NUM_PORTS = argv.ports ? parseInt(argv.ports) : 4
-const BOOKMARK_TIMEOUT = 60 * 60 * 24 * 30 // in sec
-const BOOKMARK_TIMEOUT_CHECK_INTERVAL = 60 * 1000 // in milli-sec
 const SERVER_LOAD_CHECK_INTERVAL = 60 * 1000 // in milli-sec
 // const INSTANCE_UP_CHECK_INTERVAL = 60 * 1000; // in milli-sec
 
@@ -36,7 +34,7 @@ winston.info(`your domain name is: ${domainName}`)
 winston.info(`logging directory is: ${loggingDir}`)
 
 // a helper function for generating 0..n
-const range = function(a, b) {
+const range = (a, b) => {
   const out = []
   for (; a < b; a += 1) {
     out.push(a)
@@ -112,33 +110,6 @@ app.get('/', (req, res) => {
   )
 })
 
-setInterval(() => {
-  const basedir = '../shiny_bookmarks'
-  winston.info('---- Bookmark Folder Check ----')
-  fs.readdir(basedir, (readdirErr, files) => {
-    for (let i = 0; i < files.length; i += 1) {
-      const filePath = files[i]
-      const disconnectedFilename = `${basedir}/${filePath}/disconnected`
-      fs.readFile(disconnectedFilename, (readFileErr, data) => {
-        if (readFileErr === null) {
-          const lastLogoutTime = parseInt(data)
-          const currentTime = (Date.now() / 1000) | 0
-          const secondsElapsed = currentTime - lastLogoutTime
-          winston.info(`${filePath}: secondsElapsed: ${secondsElapsed}`)
-
-          if (secondsElapsed > BOOKMARK_TIMEOUT) {
-            const dirname = `${basedir}/${filePath}`
-            winston.info(`${dirname} has timed out and is going to be deleted`)
-            rimraf(dirname, () => winston.info(`${dirname} is successfully deleted`))
-          }
-        } else {
-          winston.info(`${filePath}: no "disconnected" file`)
-        }
-      })
-    }
-  })
-}, BOOKMARK_TIMEOUT_CHECK_INTERVAL)
-
 async.forever(next => {
   async.map(
     range(PORT_START_POINT, PORT_START_POINT + NUM_PORTS),
@@ -153,5 +124,7 @@ async.forever(next => {
     }
   )
 })
+
+require('./clearBookmarksJob.js')(winston)
 
 app.listen(80)

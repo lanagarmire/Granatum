@@ -13,10 +13,15 @@
   text-align: right;
 }
 
+.container-fluid {
+  max-width: 970px;
+  margin: auto;
+}
+
 #shiny-notification-panel {
   left: 50%;
   top: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
 }
 
 .shiny-notification {
@@ -36,7 +41,7 @@
   right: 0;
   height: 100%;
   text-align: center;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 /*
@@ -94,7 +99,7 @@ img {
 }
 
 .bm-success {
-  padding:0;
-  float:right;
-  margin:5px;
+  padding: 0;
+  float: right;
+  margin: 5px;
 }

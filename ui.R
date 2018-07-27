@@ -26,6 +26,7 @@ ui <- function(request) {
         p(
           'Welcome to Granatum! This is a graphical single-cell RNA-seq (scRNA-seq) analysis pipeline for genomics scientists. The pipeline will graphically guide you through the analysis of scRNA-seq data, starting from expression and metadata tables. It uses a comprehensive set of modules for quality control / normalization, clustering, differential gene expression / enrichment analysis, protein network interaction visualization, and cell pseudo-time pathway construction.'
         ),
+        p('We welcome collaboration! If you are interested in getting help beyond standard troubleshooting please contact our PI, Lana Garmire, at: lgarmire@gmail.com'),
         p(
           strong('Please cite: ', a(href='https://genomemedicine.biomedcentral.com/articles/10.1186/s13073-017-0492-3',
             em('Zhu, Xun et al. “Granatum: A Graphical Single-Cell RNA-Seq Analysis Pipeline for Genomics Scientists.” Genome Medicine 9.1 (2017)'),

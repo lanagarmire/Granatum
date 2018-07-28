@@ -44,47 +44,6 @@
   color: #ffffff;
 }
 
-/*
-#uep_logo {
-  opacity: 1;
-  overflow:hidden;
-  -moz-animation: cssAnimation 1s 1s forwards, visibilityChange 1s forwards;
-  -webkit-animation: cssAnimation 1s 1s forwards, visibilityChange 1s forwards;
-  -o-animation: cssAnimation 1s 1s forwards, visibilityChange 1s forwards;
-  animation: cssAnimation 1s 1s forwards, visibilityChange 1s forwards;
-}
-
-@keyframes visibilityChange {
-  0% {
-      opacity:1;
-  }
-  100% {
-      opacity:0;
-  }
-}
-
-@-webkit-keyframes visibilityChange {
-  0% {
-    opacity:1;
-  }
-  100% {
-    opacity:0;
-  }
-}
-
-@keyframes cssAnimation {
-  to {
-    height:0;
-  }
-}
-
-@-webkit-keyframes cssAnimation {
-  to {
-    height:0;
-  }
-}
-*/
-
 .format-diagram {
   max-width: 700px;
 }

@@ -2,6 +2,7 @@ context("test-nodesdiffexp.R")
 
 test_that("test diff exp fun", {
   
+  # Todo: create an rda or other file with test examples.
   # Below is just a dump of our test DF (dput(mat))
   data = structure(c(0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 63L, 2L, 0L, 0L, 
     0L, 245L, 0L, 0L, 0L, 0L, 7L, 123L, 0L, 0L, 0L, 0L, 58L),

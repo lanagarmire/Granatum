@@ -48,6 +48,7 @@ addResourcePath('www', 'www')
 #- third method: size factors
 #- FPKM normalizationStep
 
+# Todo: remove below when we are moved to cloud.
 hostname = "ilab.hawaii.edu:8100"
 hostname = "granatum1.garmiregroup.org"
 

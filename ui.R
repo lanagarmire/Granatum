@@ -118,7 +118,7 @@ ui <- function(request) {
         useShinyjs(),
         extendShinyjs(text = "shinyjs.refresh = function() { location.reload(); }", functions = "refresh"),
 
-        actionButton('bm_button_uep', icon("bookmark-o", lib="font-awesome"), class = 'bm-success'),
+        actionButton('bm_button_uploadStep', icon("bookmark-o", lib="font-awesome"), class = 'bm-success'),
         fluidRow(id = 'uploadStep_help_tray',
                  p(h2(strong(
                    'Upload'

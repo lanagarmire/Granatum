@@ -1,6 +1,6 @@
 # A collection of miscellanous lines you can run in your development of this
 # package. Nothing in here is exported or used anywhere else. Purely
-# helpers for development.
+# helpers for development. This is just a scraps file.
 
 granatum.other = function () {
   library(devtools)

@@ -38,6 +38,7 @@ ui <- function(request) {
         p(
           'Note 2: depending on dataset size, some steps may take time. Please allow computations to complete even if your browser appears to hang.'
         ),
+        p('Note 3: if you encounter an error please', tags$a(href = "https://github.com/lanagarmire/granatum/issues", 'create a New Issue', target = "_blank"), 'in our GitHub repository'),
         actionButton('info_next', 'Proceed to Step 1', class = 'btn-success', onclick = "openSurveyOnce();")
       ),
       fluidRow(

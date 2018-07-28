@@ -1,4 +1,16 @@
-# Setting up a Granatum1 Server on Google Cloud (should also mostly work for other targets)
+# Granatum
+
+Granatum is a graphical single-cell RNA-seq (scRNA-seq) analysis pipeline for genomics scientists.
+
+Please Cite: Zhu, Xun et al. [Granatum: A Graphical Single-Cell RNA-Seq Analysis Pipeline for Genomics Scientists](https://genomemedicine.biomedcentral.com/articles/10.1186/s13073-017-0492-3). Genome Medicine 9.1 (2017)
+
+### Try Granatum
+
+You can use Granatum on our cloud instance running at [http://granatum1.garmiregroup.org](http://granatum1.garmiregroup.org) or clone this repository and setup a server of your own locally or in the cloud.
+
+### Setting up a Granatum1 Server on Google Cloud
+
+This should also mostly work for other targets
 
 This **should** work on Google Cloud.
 

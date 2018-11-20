@@ -11,7 +11,7 @@ sudo apt install libxml2-dev
 sudo apt install libcairo2-dev
 sudo apt install libxt-dev
 
-git clone git@gitlab.com:breckuh/granatum1.git
+git clone git@github.com:lanagarmire/Granatum.git
 cd granatum1
 mkdir shiny_bookmarks # todo: move this to code
 

@@ -6,7 +6,7 @@ Please Cite: Zhu, Xun et al. [Granatum: A Graphical Single-Cell RNA-Seq Analysis
 
 ### Try Granatum
 
-You can use Granatum on our cloud instance running at [http://granatumx.garmiregroup.org/](http://http://granatumx.garmiregroup.org) or clone this repository and setup a server of your own locally or in the cloud.
+You can use Granatum on our cloud instance running at [http://granatumx.garmiregroup.org/](http://granatumx.garmiregroup.org) or clone this repository and setup a server of your own locally or in the cloud.
 
 ### Setting up a Granatum1 Server on Google Cloud
 
